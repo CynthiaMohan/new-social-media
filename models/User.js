@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-
+const { isEmail } = require('validator');
 
 const UserSchema = new Schema(
     {
@@ -14,9 +14,11 @@ const UserSchema = new Schema(
             required: 'Please enter a valid Password',
             unique: true,
             validate: {
-                validator: function (isEmail) {
-                    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(isEmail);
-                }
+                validator: function (value) {
+                    // return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(isEmail);
+                    return isEmail(value);
+                },
+                message: 'Please enter  a valid email'
             }
         },
         thoughts: {
