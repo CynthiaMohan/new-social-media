@@ -1,18 +1,40 @@
-const { read } = require('fs/promises');
 const { User, Thought } = require('../models');
 
+
 const userController = {
+    //Get all Users
     async getAllUsers(req, res) {
-        const allUsers = await User.find({}).populate({ path: 'Thought' });
+        const allUsers = await User.find({}).populate({ path: 'Thoughts' });
         res.json(allUsers);
     },
-
-    async getUserById(req, res) {
-
+    //Get user by Id
+    async getUserById({ params }, res) {
+        const getUser = await User.findById({ _id: params.id }).populate('friends');
+        res.json(getUser);
     },
+    //Create a new User
     async createNewUser({ body }, res) {
         const newUser = await User.create(body);
         res.json(newUser);
+    },
+    //Update an existing User
+    async updateUser({ params, body }, res) {
+        const updatedUser = await User.findByIdAndUpdate(
+            { _id: params.id },
+            body,
+            { new: true, runValidators: true });
+        if (!updatedUser) {
+            res.status(404).json({ message: 'User Not Found !!' });
+        }
+        res.json(updatedUser);
+    },
+    //Delete an existing User
+    async deleteUser({ params }, res) {
+        const deletedUser = await User.findByIdAndDelete({ _id: params.id });
+        if (!deletedUser) {
+            res.status(404).json({ message: 'User Not Found !!' });
+        }
+        res.json(deletedUser);
     }
 
 }
