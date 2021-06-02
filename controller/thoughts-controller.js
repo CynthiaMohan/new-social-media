@@ -25,7 +25,16 @@ const thoughtController = {
                     { $push: { thoughts: dbThoughtData._id } },
                     { new: true }
                 )
+                    .then(dbUserData => {
+                        if (!dbUserData) {
+                            res.status(404).json({ message: 'No User found with this id' });
+                            return;
+                        }
+                        res.json(dbUserData);
+                    })
+                    .catch(e => res.json(e));
             })
+            .catch(e => res.json(e));
     },
     //Update a thought by Id
     async updateThought({ params, body }, res) {
