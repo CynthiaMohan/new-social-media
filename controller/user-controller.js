@@ -4,12 +4,14 @@ const { User, Thought } = require('../models');
 const userController = {
     //Get all Users
     async getAllUsers(req, res) {
-        const allUsers = await User.find({}).populate({ path: 'Thoughts' });
+        const allUsers = await User.find({})
+            .populate([{ path: "friends", select: "-__v" }])
+            .select('-__v');
         res.json(allUsers);
     },
     //Get user by Id
     async getUserById({ params }, res) {
-        const getUser = await User.findById({ _id: params.id }).populate('friends');
+        const getUser = await User.findOne({ _id: params.id }).populate({ path: 'friends', select: "-__v" }).select('-__v');
         res.json(getUser);
     },
     //Create a new User
