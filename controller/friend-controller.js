@@ -2,12 +2,15 @@ const { User, Thought } = require('../models');
 
 const friendController = {
     async addFriend({ params }, res) {
+        // console.log({ params });
         const addedFriend = await User.findByIdAndUpdate(
             { _id: params.id },
             { $addToSet: { friends: params.friendId } },
             { new: true }).populate({ path: 'friends' });
+
+
         if (!addedFriend) {
-            res.status(404).json({ message: 'User Not Found.' })
+            res.status(404).json({ message: 'add friend:User Not Found.' })
         }
         res.json(addedFriend);
     },
@@ -18,7 +21,7 @@ const friendController = {
             { new: true, runValidators: true }
         );
         if (!deletedFriend) {
-            res.status(404).json({ message: 'User Not Found.' })
+            res.status(404).json({ message: 'Delete friend:User Not Found.' })
         }
         res.json(deletedFriend);
 
