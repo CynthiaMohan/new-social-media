@@ -1,27 +1,16 @@
-const { User, Thought } = require('../models');
-
+const { User } = require('../models');
+// const { populate } = require("../models/User");
 
 const userController = {
     //Get all Users
     async getAllUsers(req, res) {
         console.log("inside all users");
-        const allUsers = await User.find({})
-            .populate({ path: 'thoughts', select: ('-__v') })
-            .select('-__v');
+        const allUsers = await User.find({}).sort({ _id: 1 }).select('-__v');
 
         console.log(allUsers);
         res.json(allUsers);
     },
-    // getAllUSers(req, res) {
-    //     User.find({})
-    //         .select('-__v')
-    //         .then(dbUSerData => {
-    //             res.json(dbUSerData);
-    //         })
-    //         .catch(e => {
-    //             res.json(e);
-    //         });
-    // },
+
 
     //Get user by Id
     async getUserById({ params }, res) {

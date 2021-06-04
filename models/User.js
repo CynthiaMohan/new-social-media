@@ -6,12 +6,12 @@ const UserSchema = new Schema(
         username: {
             type: String,
             unique: true,
-            required: 'Please enter a valid Username',
+            required: [true, 'Please enter a valid Username'],
             trim: true
         },
         email: {
             type: String,
-            required: 'Please enter a valid Password',
+            required: [true, 'Please enter a valid Password'],
             unique: true,
             validate: {
                 validator: function (value) {
