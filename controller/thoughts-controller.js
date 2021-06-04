@@ -1,4 +1,4 @@
-const { Thought, User } = require('../models');
+const { Thought, User, ReactionSchema } = require('../models');
 
 
 const thoughtController = {
@@ -13,23 +13,44 @@ const thoughtController = {
     // },
 
     getAllThoughts(req, res) {
+        console.log("req");
         Thought.find({})
-            .populate({ path: 'reactions', select: '-__v' })
-            .select('-__v')
+            // .populate({ path: 'reactions', select: '-__v' })
+            // .select('-__v')
+            // .sort({ _id: -1 })
             .then(dbThoughtData => res.json(dbThoughtData))
             .catch(err => res.json(err));
     },
     //Get thought by Id
-    async getThoughtsById({ params }, res) {
-        console.log(params);
-        const getthought = await Thought.findOne({ _id: params.thoughtId }).populate({ path: 'reactions' });
-        if (!getthought) {
-            res.status(404).json({ message: 'No Thought Found' });
-        }
-        res.json(getthought);
+    // async getThoughtsById({ params }, res) {
+    //     console.log(params);
+    //     const getthought = await Thought.findOne({ _id: params.thoughtId }).populate({ path: 'reactions' });
+    //     if (!getthought) {
+    //         res.status(404).json({ message: 'No Thought Found' });
+    //     }
+    //     res.json(getthought);
+    // },
+
+    getThoughtsById({ params }, res) {
+        console.log("HI");
+        Thought.findOne({ _id: params.id })
+            .populate({ path: 'reactions', select: '-__v' })
+            .select('-__v')
+            .then(dbThoughtData => {
+                if (!dbThoughtData) {
+                    res.status(404).json({ message: 'No thought with that Id could be Found' });
+                }
+                res.json(dbThoughtData);
+            })
+            .catch(e => {
+                console.log(e);
+                res.json(e);
+            });
     },
+
     // Create a new thought and push the created thought's _id to the associated user's thoughts array field
     createThought({ body }, res) {
+        console.log("Inside create thought");
         Thought.create(body)
             .then(dbThoughtData => {
                 User.findOneAndUpdate(
