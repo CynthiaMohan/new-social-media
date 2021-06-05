@@ -70,8 +70,12 @@ const thoughtController = {
 
     // create a reaction stored in a single thought's reactions array field
     async addReaction({ params, body }, res) {
-        console.log(`Add REACTION ${params} and Body is  ${body}`);
-        const newReaction = await Thought.findByIdAndUpdate({ _id: params.thoughtId }, { $addToSet: { reactions: body } }, { new: true });
+        console.log('Add REACTION' + { params } + ' and Body is' + { body });
+        const newReaction = await Thought.findByIdAndUpdate(
+            { _id: params.thoughtId },
+            { $addToSet: { reactions: body } },
+            { new: true });
+
         res.json(newReaction);
     },
     //  pull and remove a reaction by the reaction's reactionId value

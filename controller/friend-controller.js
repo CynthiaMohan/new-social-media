@@ -7,7 +7,7 @@ const friendController = {
         const addedFriend = await User.findByIdAndUpdate(
             { _id: params.id },
             { $addToSet: { friends: params.friendId } },
-            { new: true }).populate({ path: 'friends' });
+            { new: true }).populate({ path: 'friends' }).populate({ path: 'thoughts' });
 
 
         if (!addedFriend) {
