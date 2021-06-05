@@ -21,7 +21,7 @@ const userController = {
         console.log('Get user by id' + { params });
         const getUser = await User.findOne({ _id: params.id })
             .populate({ path: 'friends', select: "-__v" })
-            // .populate({ path: 'thoughts', select: '-__v' })
+            .populate({ path: 'thoughts', select: '-__v' })
             .select('-__v');
         res.json(getUser);
     },
