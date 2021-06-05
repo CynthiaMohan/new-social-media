@@ -31,8 +31,8 @@ SO THAT my website can handle large amounts of unstructured data
 ## Usage 
 In the command line run 'npm start' to begin the application.Using Insomnia or Postman the api can be tested since we dont have a front end for it yet.
 <br />
-
-![video]()
+Watch the video 
+[here](https://youtu.be/esMkupM-GAI)
 
 ## License
 
