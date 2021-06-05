@@ -1,4 +1,5 @@
-const { User, Thought, Reaction } = require('../models');
+const User = require('../models/User');
+const Thought = require('../models/Thought');
 
 const friendController = {
     async addFriend({ params }, res) {
@@ -15,7 +16,7 @@ const friendController = {
         res.json(addedFriend);
     },
     async deleteFriend({ params }, res) {
-        const deletedFriend = await User.findByIdAndDelete(
+        const deletedFriend = await User.findByIdAndUpdate(
             { _id: params.id },
             { $pull: { friends: params.friendId } },
             { new: true, runValidators: true }

@@ -46,9 +46,11 @@ const thoughtController = {
             })
             .catch(e => res.json(e));
     },
+
     //Update a thought by Id
     async updateThought({ params, body }, res) {
-        const updatedThought = await Thought.findByIdAndUpdate({ _id: params.id }, body, { new: true, runValidators: true });
+        console.log(params);
+        const updatedThought = await Thought.findByIdAndUpdate({ _id: params.thoughtId }, body, { new: true, runValidators: true });
         if (!updatedThought) {
             res.status(404).json({ message: 'Thought Not Found!' });
             return;
@@ -62,23 +64,30 @@ const thoughtController = {
             res.status(404).json({ message: 'No thought Found with this Id' });
             return;
         }
-        res.json(deletedThought);
+        console.log("deletedThought is" + deletedThought);
+        res.json({ message: "Thought was deleted" });
     },
+
     // create a reaction stored in a single thought's reactions array field
     async addReaction({ params, body }, res) {
         console.log(`Add REACTION ${params} and Body is  ${body}`);
-        const newReaction = await Thought.findByIdAndUpdate({ _id: params.thoughtId }, { $push: { reactions: body } }, { new: true });
+        const newReaction = await Thought.findByIdAndUpdate({ _id: params.thoughtId }, { $addToSet: { reactions: body } }, { new: true });
         res.json(newReaction);
     },
     //  pull and remove a reaction by the reaction's reactionId value
     async deleteReaction({ params }, res) {
         console.log('deleting reaction...');
-        const deletedReaction = await Thought.findByIdAndDelete({ _id: params.id }, { $pull: { reactions: { reactionsId: params.reactionsId } } }, { new: true });
+        console.log(params);
+        const deletedReaction = await Thought.findByIdAndUpdate(
+            { _id: params.thoughtId },
+            { $pull: { reactions: { reactionsId: params.reactionsId } } },
+            { new: true });
         if (!deletedReaction) {
             res.status(404).json({ message: 'Reaction to be deleted Not Found!' });
             return;
         }
-        res.json(deletedReaction);
+        console.log(deletedReaction);
+        res.json({ message: "Reaction was Deleted" });
     }
 };
 
