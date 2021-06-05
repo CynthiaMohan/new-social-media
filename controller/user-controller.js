@@ -5,7 +5,7 @@ const userController = {
     //Get all Users
     async getAllUsers(req, res) {
         console.log("inside all users");
-        const allUsers = await User.find({}).sort({ _id: 1 }).select('-__v');
+        const allUsers = await User.find({}).populate({ path: 'friends' }).populate('thoughts').sort({ _id: 1 }).select('-__v');
 
         console.log(allUsers);
         res.json(allUsers);
@@ -16,10 +16,8 @@ const userController = {
     async getUserById({ params }, res) {
         console.log('Get user by id' + { params });
         const getUser = await User.findOne({ _id: params.id })
-            .populate([
-                { path: 'friends', select: "-__v" },
-                { path: 'thoughts', select: '-__v' }
-            ])
+            .populate({ path: 'friends', select: "-__v" })
+            // .populate({ path: 'thoughts', select: '-__v' })
             .select('-__v');
         res.json(getUser);
     },

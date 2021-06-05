@@ -1,52 +1,29 @@
-const { Thought, User, ReactionSchema } = require('../models');
+const User = require('../models/User');
+const Thought = require('../models/Thought');
 
 
 const thoughtController = {
     //Get all thoughts
-    // async getAllThoughts(req, res) {
-    //     const getAll = await Thought.find({})
-    //         // .populate({ path: 'reactions', select: '-__v' })
-    //         .select('-__v')
-    //         .sort({ _id: -1 });
-    //     console.log(getAll);
-    //     res.json(getAll);
-    // },
-
-    getAllThoughts(req, res) {
-        console.log("req");
-        Thought.find({})
-            // .populate({ path: 'reactions', select: '-__v' })
-            // .select('-__v')
-            // .sort({ _id: -1 })
-            .then(dbThoughtData => res.json(dbThoughtData))
-            .catch(err => res.json(err));
-    },
-    //Get thought by Id
-    // async getThoughtsById({ params }, res) {
-    //     console.log(params);
-    //     const getthought = await Thought.findOne({ _id: params.thoughtId }).populate({ path: 'reactions' });
-    //     if (!getthought) {
-    //         res.status(404).json({ message: 'No Thought Found' });
-    //     }
-    //     res.json(getthought);
-    // },
-
-    getThoughtsById({ params }, res) {
-        console.log("HI");
-        Thought.findOne({ _id: params.id })
-            .populate({ path: 'reactions', select: '-__v' })
+    async getAllThoughts(req, res) {
+        const getAll = await Thought.find({})
+            .populate('reactions')
+            .populate('thoughts')
             .select('-__v')
-            .then(dbThoughtData => {
-                if (!dbThoughtData) {
-                    res.status(404).json({ message: 'No thought with that Id could be Found' });
-                }
-                res.json(dbThoughtData);
-            })
-            .catch(e => {
-                console.log(e);
-                res.json(e);
-            });
+            .sort({ _id: -1 }).exec();
+        console.log(getAll);
+        res.json(getAll);
     },
+    // Get thought by Id
+
+    async getThoughtsById({ params }, res) {
+        console.log(params);
+        const getthought = await Thought.findOne({ _id: params.thoughtId }).populate({ path: 'reactions' });
+        if (!getthought) {
+            res.status(404).json({ message: 'No Thought Found' });
+        }
+        res.json(getthought);
+    },
+
 
     // Create a new thought and push the created thought's _id to the associated user's thoughts array field
     createThought({ body }, res) {

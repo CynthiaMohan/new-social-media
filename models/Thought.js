@@ -5,8 +5,8 @@ const dateFormat = require('../utils/dateFormat');
 const ReactionSchema = new Schema(
     {
         reactionId: {
-            type: Types.ObjectId,
-            default: new Types.ObjectId(),
+            type: Schema.Types.ObjectId,
+            default: () => new Types.ObjectId(),
         },
         reactionBody: {
             type: String,
@@ -21,18 +21,17 @@ const ReactionSchema = new Schema(
             type: Date,
             default: Date.now,
             // Use a getter method to format the timestamp on query
-            get: createdAtVal => dateFormat(createdAtVal)
+            get: (createdAtVal) => dateFormat(createdAtVal)
         }
     },
     {
         toJSON: {
             getters: true
         },
-        id: false
     }
 );
 
-ThoughtSchema = new Schema(
+const ThoughtSchema = new Schema(
     {
         thoughtText: {
             type: String,
@@ -43,7 +42,7 @@ ThoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
-            get: createdAtVal => dateFormat(createdAtVal)
+            get: (createdAtVal) => dateFormat(createdAtVal)
         },
         username: {
             type: String,
@@ -64,8 +63,8 @@ ThoughtSchema = new Schema(
 
 
 //Schema settings-create virtual reactionCount
-ThoughtSchema.virtual("reactionCount").get(() => {
-    console.log(this, reactions.length);
+ThoughtSchema.virtual("reactionCount").get(function () {
+    // console.log('this.reactions.length => ' + this.reactions.length);
     return this.reactions.length;
 });
 
