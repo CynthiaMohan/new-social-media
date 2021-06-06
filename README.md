@@ -17,6 +17,7 @@ SO THAT my website can handle large amounts of unstructured data
 * [Usage](#usage)
 * [License](#license)
 * [Technologies](#Technologies)
+* [Screenshots](#Screenshots)
 * [Questions](#questions)
 
 
@@ -47,6 +48,8 @@ This Application is covered under :
 * Mongoose
 * Express.js
 
+## Screenshots
+![Get-all-thoughts](ss.png)
 
 ## Questions
 View my Github Profile at [CynthiaMohan](http://github.com/CynthiaMohan)
